@@ -22,9 +22,14 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Parcel;
+import android.os.CancellationSignal;
+import android.os.ParcelFileDescriptor;
 import android.print.InAppWebViewPrintDocumentAdapter;
+import android.print.PageRange;
+import android.print.PdfPrinterHelper;
 import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
+import android.print.PrintDocumentInfo;
 import android.print.PrintJob;
 import android.print.PrintManager;
 import android.text.TextUtils;
@@ -105,6 +110,7 @@ import com.pichillilorenzo.flutter_inappwebview_android.webview.web_message.WebM
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -1543,6 +1549,69 @@ final public class InAppWebView extends InputAwareWebView implements InAppWebVie
       }
     }
     return null;
+  }
+  public void exportPdf(
+      @Nullable PrintJobSettings settings,
+      @NonNull String targetDirectory,
+      @NonNull String targetName,
+      MethodChannel.Result result
+  ) {
+
+    PrintAttributes.Builder builder = new PrintAttributes.Builder();
+    if (settings != null) {
+      if (settings.orientation != null) {
+        switch (settings.orientation) {
+          case 0:
+            builder.setMediaSize(PrintAttributes.MediaSize.UNKNOWN_PORTRAIT);
+            break;
+          case 1:
+            builder.setMediaSize(PrintAttributes.MediaSize.UNKNOWN_LANDSCAPE);
+            break;
+        }
+      }
+      if (settings.mediaSize != null) {
+        builder.setMediaSize(settings.mediaSize.toMediaSize());
+      }
+      if (settings.colorMode != null) {
+        builder.setColorMode(settings.colorMode);
+      }
+      if (settings.duplexMode != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        builder.setDuplexMode(settings.duplexMode);
+      }
+      if (settings.resolution != null) {
+        builder.setResolution(settings.resolution.toResolution());
+      }
+    }
+
+    if (settings == null || settings.resolution == null) {
+      builder.setResolution(new PrintAttributes.Resolution("pdf", "pdf", 600, 600));
+    }
+    builder.setMinMargins(PrintAttributes.Margins.NO_MARGINS);
+
+    PrintDocumentAdapter printAdapter;
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      printAdapter = createPrintDocumentAdapter(targetName);
+    } else {
+      printAdapter = createPrintDocumentAdapter();
+    }
+
+    PdfPrinterHelper.exportPdf(
+      builder.build(),
+      printAdapter,
+      targetDirectory,
+      targetName,
+      new PdfPrinterHelper.ExportCallback() {
+        @Override
+        public void onSuccess(@NonNull String resultPath) {
+          result.success(resultPath);
+        }
+
+        @Override
+        public void onError(@NonNull String code, @Nullable String message) {
+          result.error(code, message, null);
+        }
+      }
+    );
   }
 
   @Override

@@ -50,6 +50,7 @@ public enum WebViewChannelDelegateMethods {
   pauseTimers,
   resumeTimers,
   printCurrentPage,
+  exportPdf,
   getContentHeight,
   getContentWidth,
   zoomBy,

@@ -8,6 +8,7 @@ import android.webkit.ValueCallback;
 import android.webkit.WebMessage;
 import android.webkit.WebView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.pichillilorenzo.flutter_inappwebview_android.InAppWebViewFlutterPlugin;
@@ -68,6 +69,13 @@ public interface InAppWebViewInterface {
   void resumeTimers();
   @Nullable
   String printCurrentPage(@Nullable PrintJobSettings settings);
+
+  void exportPdf(
+    @Nullable PrintJobSettings settings,
+    @NonNull String targetDirectory,
+    @NonNull String targetName,
+    MethodChannel.Result result
+  );
   int getContentHeight();
   void getContentHeight(ValueCallback<Integer> callback);
   void getContentWidth(ValueCallback<Integer> callback);

@@ -1679,6 +1679,28 @@ abstract class PlatformInAppWebViewController extends PlatformInterface
     );
   }
 
+  //{@template flutter_inappwebview_platform_interface.PlatformInAppWebViewController.exportPdf}
+  ///Saves the current WebView content as a PDF file at the given [].
+  @SupportedPlatforms(
+    platforms: [
+      AndroidPlatform(
+        apiName: 'PdfPrinter',
+        apiUrl:
+        'https://developer.android.com/reference/android/print/package-summary',
+        note: 'Requires Android API level 19+.',
+      ),
+    ],
+  )
+  Future<String> exportPdf({
+    required String targetDirectory,
+    required String targetName,
+    PrintJobSettings? settings,
+  }) {
+    throw UnimplementedError(
+      '${PlatformInAppWebViewControllerMethod.exportPdf.name} is not implemented on the current platform',
+    );
+  }
+
   ///{@template flutter_inappwebview_platform_interface.PlatformInAppWebViewController.getContentHeight}
   ///Gets the height of the HTML content.
   ///{@endtemplate}

@@ -2484,6 +2484,20 @@ class AndroidInAppWebViewController extends PlatformInAppWebViewController
   }
 
   @override
+  Future<String> exportPdf({
+    required String targetDirectory,
+    required String targetName,
+    PrintJobSettings? settings,
+  }) async {
+    Map<String, dynamic> args = <String, dynamic>{};
+    args.putIfAbsent("targetDirectory", () => targetDirectory);
+    args.putIfAbsent("targetName", () => targetName);
+    args.putIfAbsent("settings", () => settings?.toMap());
+    final generatedPdfFilePath = await channel?.invokeMethod<String?>('exportPdf', args);
+    return generatedPdfFilePath ?? '';
+  }
+
+  @override
   Future<int?> getContentHeight() async {
     Map<String, dynamic> args = <String, dynamic>{};
     var height = await channel?.invokeMethod('getContentHeight', args);

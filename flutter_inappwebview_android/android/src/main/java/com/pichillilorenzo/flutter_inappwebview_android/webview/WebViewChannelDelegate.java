@@ -2,6 +2,8 @@ package com.pichillilorenzo.flutter_inappwebview_android.webview;
 
 import android.net.Uri;
 import android.os.Build;
+import android.print.PdfPrinterHelper;
+import android.util.Log;
 import android.webkit.ValueCallback;
 import android.webkit.WebView;
 
@@ -371,6 +373,29 @@ public class WebViewChannelDelegate extends ChannelDelegateImpl {
           result.success(webView.printCurrentPage(settings));
         } else {
           result.success(null);
+        }
+        break;
+      case exportPdf:
+        if (webView != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+          PrintJobSettings settings = new PrintJobSettings();
+          Map<String, Object> settingsMap = (Map<String, Object>) call.argument("settings");
+          String targetDirectory = call.argument("targetDirectory");
+          String targetName = call.argument("targetName");
+          if (settingsMap != null) {
+            settings.parse(settingsMap);
+          }
+          if (targetName == null) {
+            targetName = "Document";
+          }
+          webView.exportPdf(
+            settings,
+            targetDirectory,
+            targetName,
+            result
+          );
+
+        } else {
+          result.error("ERR_LAYOUT_FAILED", "No support", null);
         }
         break;
       case getContentHeight:

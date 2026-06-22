@@ -1800,6 +1800,17 @@ enum PlatformInAppWebViewControllerMethod {
   ///{@endtemplate}
   printCurrentPage,
 
+  ///Can be used to check if the [PlatformInAppWebViewController.exportPdf] method is supported at runtime.
+  ///
+  ///{@template flutter_inappwebview_platform_interface.PlatformInAppWebViewController.exportPdf.supported_platforms}
+  ///
+  ///**Officially Supported Platforms/Implementations**:
+  ///- Android WebView ([Official API - PdfPrinter](https://developer.android.com/reference/android/print/package-summary))
+  ///
+  ///Use the [PlatformInAppWebViewController.isMethodSupported] method to check if this method is supported at runtime.
+  ///{@endtemplate}
+  exportPdf,
+
   ///Can be used to check if the [PlatformInAppWebViewController.reload] method is supported at runtime.
   ///
   ///{@template flutter_inappwebview_platform_interface.PlatformInAppWebViewController.reload.supported_platforms}
@@ -3397,6 +3408,11 @@ extension _PlatformInAppWebViewControllerMethodSupported
                     TargetPlatform.macOS,
                     TargetPlatform.windows,
                   ].contains(platform ?? defaultTargetPlatform);
+      case PlatformInAppWebViewControllerMethod.exportPdf:
+        return ((kIsWeb && platform != null) || !kIsWeb) &&
+            [
+              TargetPlatform.android,
+            ].contains(platform ?? defaultTargetPlatform);
       case PlatformInAppWebViewControllerMethod.reload:
         return kIsWeb && platform == null
             ? true

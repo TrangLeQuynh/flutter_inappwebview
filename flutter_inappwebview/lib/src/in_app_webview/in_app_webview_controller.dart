@@ -395,6 +395,16 @@ class InAppWebViewController {
     );
   }
 
+  ///{@macro flutter_inappwebview_platform_interface.PlatformInAppWebViewController.exportPdf}
+  ///
+  ///{@macro flutter_inappwebview_platform_interface.PlatformInAppWebViewController.exportPdf.supported_platforms}
+  Future<String> exportPdf({
+    required String targetDirectory,
+    required String targetName,
+    PrintJobSettings? settings,
+  }) =>
+      platform.exportPdf(targetDirectory: targetDirectory, targetName: targetName, settings: settings);
+
   ///{@macro flutter_inappwebview_platform_interface.PlatformInAppWebViewController.getContentHeight}
   ///
   ///{@macro flutter_inappwebview_platform_interface.PlatformInAppWebViewController.getContentHeight.supported_platforms}
