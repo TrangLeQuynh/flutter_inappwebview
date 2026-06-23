@@ -14,14 +14,14 @@ topics:
   - browser
 
 environment:
-  sdk: ^3.8.0
-  flutter: ">=3.32.0"
+  sdk: ^3.5.0
+  flutter: ">=3.27.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  flutter_inappwebview_platform_interface: ^1.4.0-beta.3
-    # path: ../flutter_inappwebview_platform_interface
+  flutter_inappwebview_platform_interface:
+     path: ../flutter_inappwebview_platform_interface
 
 dev_dependencies:
   flutter_test:
